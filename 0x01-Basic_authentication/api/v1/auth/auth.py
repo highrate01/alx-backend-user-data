@@ -15,15 +15,16 @@ class Auth:
         """
         checks if api is required to access path
         """
-        if not path or path not in excluded_paths:
+        if path is None:
             return True
-        if not excluded_paths or excluded_paths == []:
+        if not excluded_paths or excluded_paths is None:
             return True
-        if path in excluded_paths:
-            return False
-        if path and not path.endwith('/'):
-            path = path + '/'
-        return False
+        path = path.rstrip('/') + '/'
+
+        for excluded_path in excluded_paths:
+            if path.startswith(excluded_path):
+                return False
+        return True
 
     def authorization_header(self, request=None) -> str:
         """
