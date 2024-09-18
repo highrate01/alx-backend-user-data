@@ -3,7 +3,7 @@
 contains class module
 """
 from flask import request
-from typing import List, TypeVar
+from typing import List, TypeVar, Optional
 
 
 class Auth:
@@ -26,11 +26,17 @@ class Auth:
                 return False
         return True
 
-    def authorization_header(self, request=None) -> str:
+    def authorization_header(self, request=None) -> Optional[str]:
         """
-        checks authorization header
+        checks authorizatrion header in the request
         """
-        return None
+        key = 'Authorization'
+
+        if request is None:
+            return None
+        if key not in request.headers:
+            return None
+        return request.headers.get(key)
 
     def current_user(self, request=None) -> TypeVar('User'):
         """
