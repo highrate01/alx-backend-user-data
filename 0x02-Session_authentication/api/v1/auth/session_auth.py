@@ -10,7 +10,10 @@ class SessionAuth(Auth):
     """
     authentication mechanism
     """
-    user_id_by_session_id = {}
+    def __init__(self):
+        """initializer"""
+        self.user_id_by_session_id = {}
+        super().__init__()
 
     def create_session(self, user_id: str = None) -> str:
         """
@@ -36,3 +39,17 @@ class SessionAuth(Auth):
             return None
         user_id = self.user_id_by_session_id.get(session_id)
         return user_id
+
+    def current_user(self, request=None):
+        """
+        returns a User instance based on a cookie value:
+        """
+        if request is None:
+            return None
+        session_id = self.session_cookie(request)
+        if session_id is None:
+            return None
+        user_id = self.user_id_for_session_id(session_id)
+        if user_id is None:
+            return None
+        return User.get(user_id)
