@@ -60,7 +60,7 @@ class SessionAuth(Auth):
             return False
 
         session_id = self.session_cookie(request)
-        if sessio_id is None:
+        if session_id is None:
             return False
         user_id = self.user_id_for_session_id(session_id)
 
