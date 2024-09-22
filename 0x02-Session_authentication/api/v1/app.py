@@ -35,8 +35,11 @@ def before_request() -> str:
     To filter each request before it is handled by
     appropiate route
     """
-    excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/',
-                      '/api/v1/forbidden/', '/api/v1/auth_session/login/']
+    excluded_paths = ['/api/v1/status/',
+                      '/api/v1/unauthorized/',
+                      '/api/v1/forbidden/',
+                      '/api/v1/auth_session/login/'
+                      ]
     if auth is None:
         return
     if not auth.require_auth(request.path, excluded_paths):
@@ -48,8 +51,7 @@ def before_request() -> str:
     current_user = auth.current_user(request)
     if current_user is None:
         abort(403)
-    else:
-        request.current_user = current_user
+    request.current_user = current_user
 
 
 @app.errorhandler(404)

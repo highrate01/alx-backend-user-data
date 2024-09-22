@@ -46,6 +46,10 @@ class Auth:
         """
         checks user
         """
+        session_id = self.session_cookie(request)
+        if session_id:
+            user_id = self.user_id_for_session_id(session_id)
+            return User.get(user_id)
         return None
 
     def session_cookie(self, request=None):

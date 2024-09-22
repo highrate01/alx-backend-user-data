@@ -2,7 +2,7 @@
 """
 contains SessionAuth class module that inherits
 """
-from api.v1.auth.auth import Auth
+from .auth import Auth
 import uuid
 from models.user import User
 
@@ -11,10 +11,7 @@ class SessionAuth(Auth):
     """
     authentication mechanism
     """
-    def __init__(self):
-        """initializer"""
-        self.user_id_by_session_id = {}
-        super().__init__()
+    user_id_by_session_id = {}
 
     def create_session(self, user_id: str = None) -> str:
         """
