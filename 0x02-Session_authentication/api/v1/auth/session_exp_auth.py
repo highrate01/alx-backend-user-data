@@ -2,7 +2,7 @@
 """
 Contains the SessionExpAuth class
 """
-from .session_auth import SessionAuth
+from api.v1.auth.session_auth import SessionAuth
 import os
 from datetime import datetime, timedelta
 
@@ -14,8 +14,8 @@ class SessionExpAuth(SessionAuth):
     def __init__(self):
         """initializer"""
         try:
-            self.sess_dura = int(os.getenv("SESSION_DURATION", "0"))
-        except Exception:
+            self.sess_dura = int(os.getenv('SESSION_DURATION'))
+        except ValueError:
             self.sess_dura = 0
 
     def create_session(self, user_id=None):
