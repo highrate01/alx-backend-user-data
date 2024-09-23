@@ -9,47 +9,53 @@ from datetime import datetime, timedelta
 
 class SessionExpAuth(SessionAuth):
     """
-    Adds an  expiration date to session ID
+    SessionExpAuth class to add an expiration date to a Session ID
     """
     def __init__(self):
-        """initializer"""
+        """
+        Initialize SessionExpAuth
+        """
+        super().__init__()
         try:
-            self.sess_dura = int(os.getenv('SESSION_DURATION'))
+            self.session_duration = int(os.getenv('SESSION_DURATION', '0'))
         except ValueError:
-            self.sess_dura = 0
+            self.session_duration = 0
 
     def create_session(self, user_id=None):
         """
-        Creates a session ID
+        Create a Session ID
         """
         session_id = super().create_session(user_id)
-
         if session_id is None:
             return None
-        session_dict = {
-                "user_id": user_id,
-                "created_at": datetime.utcnow()
-                }
-        self.user_id_by_session_id[session_id] = session_dict
+
+        session_dictionary = {
+            "user_id": user_id,
+            "created_at": datetime.now()
+        }
+        self.user_id_by_session_id[session_id] = session_dictionary
         return session_id
 
     def user_id_for_session_id(self, session_id=None):
         """
-        Returns user_id based on session_id
+        Return the user ID based on the Session ID
         """
         if session_id is None:
             return None
-        session_dict = self.user_id_by_session_id.get(session_id)
 
-        if session_dict is None:
+        session_dictionary = self.user_id_by_session_id.get(session_id)
+        if session_dictionary is None:
             return None
-        if self.sess_dura <= 0:
-            return session_dict.get("user_id")
-        created_at = session_dict.get("created_at")
+
+        if self.session_duration <= 0:
+            return session_dictionary.get("user_id")
+
+        created_at = session_dictionary.get("created_at")
         if created_at is None:
             return None
 
-        exp_time = created_at + timedelta(seconds=self.sess_dura)
-        if datetime.utcnow() >= exp_time:
+        expiration_time = created_at + timedelta(seconds=self.session_duration)
+        if datetime.now() >= expiration_time:
             return None
-        return session_dict.get("user_id")
+
+        return session_dictionary.get("user_id")
