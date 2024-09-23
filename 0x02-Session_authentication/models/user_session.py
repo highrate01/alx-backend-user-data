@@ -2,7 +2,7 @@
 """
 contains database class that stores authentication system
 """
-from models.base import Base 
+from models.base import Base
 
 
 class UserSession(Base):
