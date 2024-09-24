@@ -70,13 +70,11 @@ class DB:
         """
         updates the user details by id
         """
-        if user_id:
-            user = self.find_user_by(user_id=id)
-            if kwargs:
-                for key, value in kwargs.items():
-                    if not hasattr(User, key):
-                        raise ValueError
-                    setattr(user, key, value)
-                self._session.commit()
-            return None
+        user = self.find_user_by(id=user_id)
+        if kwargs:
+            for key, value in kwargs.items():
+                if not hasattr(User, key):
+                    raise ValueError
+                setattr(user, key, value)
+            self._session.commit()
         return None
