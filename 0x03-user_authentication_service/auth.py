@@ -5,17 +5,18 @@ contains a hashed password function
 import bcrypt
 from db import DB
 from user import User
-from sqlalchemy.exc import NoResultFound
+from typing import Optional
+from sqlalchemy.orm.exc import NoResultFound
 
 
-"""def _hash_password(password: str) -> bytes:
-
+def _hash_password(password: str) -> bytes:
+    """
     Hashes a password using bcrypt
-
+    """
     gen_salt = bcrypt.gensalt()
     hash_pwd = bcrypt.hashpw(password.encode('utf-8'), gen_salt)
 
-    return hash_pwd"""
+    return hash_pwd
 
 
 class Auth:
@@ -25,7 +26,7 @@ class Auth:
     def __init__(self):
         self._db = DB()
 
-    def register_user(self, email: str, password: str) -> User:
+    def register_user(self, email: str, password: str) -> Optional[User]:
         """
         Registers user email
         """
@@ -33,15 +34,6 @@ class Auth:
             self._db.find_user_by(email=email)
             raise ValueError(f"User {email} already exists")
         except NoResultFound:
-            hashed_password = self._hash_password(password)
+            hashed_password = _hash_password(password)
             user = self._db.add_user(email, hashed_password)
             return user
-
-    def _hash_password(self, password: str) -> bytes:
-        """
-        Hashes a password using bcrypt
-        """
-        gen_salt = bcrypt.gensalt()
-        hash_pwd = bcrypt.hashpw(password.encode('utf-8'), gen_salt)
-
-        return hash_pwd
