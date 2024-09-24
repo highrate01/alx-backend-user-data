@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """DB module
 """
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, and_
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from user import User
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 
 from user import Base
 
@@ -43,3 +45,21 @@ class DB:
         self._session.add(user)
         self._session.commit()
         return user
+
+    def find_user_by(self, **kwargs: str) -> User:
+        """
+        returns the first row found in the users
+        """
+        if kwargs:
+            for key in kwargs:
+                if not hasattr(User, key):
+                    raise InvalidRequestError()
+                conditions = [getattr(
+                    User, key) == value for key, value in kwargs.items()]
+
+                user = self._session.query(User).filter(
+                        and_(*conditions)).first()
+
+                if not user:
+                    raise NoResultFound()
+                return user
