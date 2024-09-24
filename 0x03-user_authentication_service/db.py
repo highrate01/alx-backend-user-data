@@ -46,7 +46,7 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs: str) -> User:
+    def find_user_by(self, **kwargs) -> User:
         """
         returns the first row found in the users
         """
@@ -63,3 +63,5 @@ class DB:
                 if not user:
                     raise NoResultFound()
                 return user
+        else:
+            return None
