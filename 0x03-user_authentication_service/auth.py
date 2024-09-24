@@ -6,7 +6,7 @@ import bcrypt
 from db import DB
 from user import User
 from typing import Optional
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import NoResultFound
 
 
 class Auth:
@@ -20,19 +20,13 @@ class Auth:
         """
         Registers user email
         """
-        """try:
+        try:
             self._db.find_user_by(email=email)
             raise ValueError(f"User {email} already exists")
         except NoResultFound:
             hashed_password = _hash_password(password)
             user = self._db.add_user(email, hashed_password)
-            return user"""
-        try:
-            hashed_password = _hash_password(password)
-            user = self._db.add_user(email, hashed_password)
             return user
-        except IntegrityError:
-            raise ValueError(f"User {email} already exists")
 
 def _hash_password(password: str) -> bytes:
     """
