@@ -65,3 +65,18 @@ class DB:
                 return user
         else:
             return None
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """
+        updates the user details by id
+        """
+        if user_id:
+            user = self.find_user_by(user_id=id)
+            if kwargs:
+                for key, value in kwargs.items():
+                    if not hasattr(User, key):
+                        raise ValueError
+                    setattr(user, key, value)
+                self._session.commit()
+            return None
+        return None
