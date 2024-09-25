@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.route('/', methods=['GET'])
 
 
-def payload():
+def welcome() -> str:
     """return json payload"""
     return jsonify({"message": "Bienvenue"})
 
