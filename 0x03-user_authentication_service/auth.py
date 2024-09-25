@@ -4,7 +4,7 @@ from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
-from typing import Optional
+from typing import Optional, Union
 import uuid
 
 
@@ -79,3 +79,16 @@ class Auth:
         update_user = self._db.update_user
         update_user(user.id, session_id=session_id)
         return session_id
+
+    def get_user_from_session_id(self, session_id) -> Union[User, None]:
+        """
+        finds user by session id and return
+        corresponding user
+        """
+        if session_id is None:
+            return None
+        try:
+            user = self._db.find_user_by(session_id=session_id)
+        except NoResultFound:
+            return None
+        return user
