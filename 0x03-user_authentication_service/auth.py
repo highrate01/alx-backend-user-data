@@ -80,7 +80,7 @@ class Auth:
         update_user(user.id, session_id=session_id)
         return session_id
 
-    def get_user_from_session_id(self, session_id) -> Union[User, None]:
+    def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
         """
         finds user by session id and return
         corresponding user
@@ -92,3 +92,12 @@ class Auth:
         except NoResultFound:
             return None
         return user
+
+    def destroy_session(self, user_id: int) -> None:
+        """
+        updates the corresponding user’s session ID to None
+        """
+        if user_id is None:
+            return None
+        update_user = self._db.update_user
+        update_user(user_id, session_id=None)
