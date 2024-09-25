@@ -40,13 +40,14 @@ class Auth:
         validates user login
         """
         try:
-            # Find user by email
             user = self._db.find_user_by(email=email)
-            if user is not None:
-                # Convert password to bytes and check hash
-                pwd_byte = password.encode('utf-8')
-                if bcrypt.checkpw(pwd_byte, user.hashed_password):
-                    return True
-            return False
+
+            # Convert password to bytes and check hash
+            pwd_bytes = password.encode('utf-8')
+
+            hashed_password = user.hashed_password
+            if isinstance(hashed_password, str):
+                hashed_password = user.hashed_password.encode('utf-8')
+            return bcrypt.checkpw(pwd_bytes, hashed_password)
         except NoResultFound:
             return False
