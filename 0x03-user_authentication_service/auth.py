@@ -32,3 +32,5 @@ class Auth:
         except NoResultFound:
             hashed_password = self._hash_password(password)
             return self._db.add_user(email, hashed_password.decode('utf-8'))
+        except InvalidRequestError:
+            raise ValueError("Invalid email")
