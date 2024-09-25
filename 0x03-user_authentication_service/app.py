@@ -4,10 +4,13 @@ contains flask routes
 """
 from flask import Flask, jsonify
 
+
 app = Flask(__name__)
 
 
-app.route('/')
+app.route('/', methods=['GET'])
+
+
 def payload():
     """return json payload"""
     return jsonify({"message": "Bienvenue"})
