@@ -21,7 +21,7 @@ class Auth:
         hash_pwd = bcrypt.hashpw(password.encode('utf-8'), gen_salt)
         return hash_pwd
 
-    def register_user(self, email: str, password: str) -> User:
+    def register_user(self, email: str, password: str) -> Optional[User]:
         """
         Registers user email
         """
