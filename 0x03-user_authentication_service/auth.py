@@ -7,6 +7,7 @@ from db import DB
 from user import User
 from typing import Optional
 from sqlalchemy.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 
 
 def _hash_password(password: str) -> bytes:
@@ -30,8 +31,11 @@ class Auth:
         """
         Registers user email
         """
-        if self._db.find_user_by(email=email) is not None:
-            raise ValueError(f"User {email} already exists")
-
-        hashed_password = _hash_password(password)
-        return self._db.add_user(email, hashed_password)
+        try:
+            if self._db.find_user_by(email=email) is not None:
+                raise ValueError(f"User {email} already exists")
+        except NoResultFound:
+            hashed_password = _hash_password(password)
+            return self._db.add_user(email, hashed_password)
+        except InvalidRequestError:
+            raise ValueError("Invalid email")
