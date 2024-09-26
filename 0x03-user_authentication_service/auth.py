@@ -107,7 +107,7 @@ class Auth:
         generates a uuid and updates user's reset_token
         """
         try:
-            user = self._db.user.find_user_by(email=email)
+            user = self._db.find_user_by(email=email)
         except NoResultFound:
             raise ValueError("User does not exist")
         reset_token = _generate_uuid()
