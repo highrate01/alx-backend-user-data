@@ -124,5 +124,5 @@ class Auth:
         except NoResultFound:
             raise ValueError("Invalid reset token")
         hashed_password = _hash_password(password)
-        update_user = self._db.update_user()
+        update_user = self._db.update_user
         update_user(user.id, hashed_password=hash_password, reset_token=None)
