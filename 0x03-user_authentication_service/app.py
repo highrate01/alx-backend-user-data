@@ -7,7 +7,8 @@ from flask import (
         jsonify,
         request,
         abort,
-        redirect
+        redirect,
+        Response
         )
 from auth import Auth
 
@@ -71,6 +72,20 @@ def logout() -> str:
         AUTH.destroy_session(user.id)
         return redirect('/')
     abort(403)
+
+
+@app.route('/profile', methods=['GET'])
+def profile() -> Response:
+    """
+    get user profile
+    """
+    session_id = request.cookies.get('session_id')
+    if session_id is None:
+        abort(403)
+    user = AUTH.get_user_from_session_id(session_id)
+    if not user:
+        abort(403)
+    return jsonify({"email": user.email})
 
 
 if __name__ == "__main__":
