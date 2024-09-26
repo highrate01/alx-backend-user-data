@@ -109,12 +109,13 @@ def get_reset_password_token():
 @app.route('/reset_password', methods=['PUT'])
 def update_password():
     """
-    respond to updated password
+    Respond to password update request.
     """
     email = request.form.get('email')
-    password = request.form.get('new_password')
-    reset_password = request.form.get('reset_token')
-    if not all(email, password, reset_token):
+    new_password = request.form.get('new_password')
+    reset_token = request.form.get('reset_token')
+
+    if not all([email, new_password, reset_token]):
         abort(400)
     try:
         AUTH.update_password(reset_token, new_password)
@@ -123,7 +124,7 @@ def update_password():
     return jsonify({
         "email": email,
         "message": "Password updated"
-        }), 200
+    }), 200
 
 
 if __name__ == "__main__":
