@@ -110,6 +110,20 @@ def get_reset_password_token():
 def update_password():
     """
     Respond to password update request.
+
+    This function handles the PUT request to reset a user's password.
+    It expects the following form data:
+    - email: The user's email address
+    - new_password: The new password to set
+    - reset_token: The token to validate the reset request
+
+    Returns:
+    - A JSON response with the user's email and a success message
+    - HTTP 200 status code on success
+    - HTTP 403 status code if the reset token is invalid
+
+    Raises:
+    - 403 Forbidden if the reset token is invalid or expired
     """
     email = request.form.get('email')
     new_password = request.form.get('new_password')
